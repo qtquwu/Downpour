@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "me.qtq.downpour.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"RainControllerMixin",
+		"BiomeAccessor",
+		"ServerRainControllerMixin",
+		"SnowStopper"
+	],
+
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

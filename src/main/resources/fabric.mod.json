@@ -1,0 +1,42 @@
+{
+	"schemaVersion": 1,
+	"id": "downpour",
+	"version": "${version}",
+	"name": "Downpour",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/downpour/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"me.qtq.downpour.Downpour"
+		],
+		"client": [
+			"me.qtq.downpour.DownpourClient"
+		]
+	},
+	"mixins": [
+		"downpour.mixins.json",
+		{
+			"config": "downpour.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.14.21",
+		"minecraft": "~1.20",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	},
+	"accessWidener": "downpour.accesswidener"
+}
