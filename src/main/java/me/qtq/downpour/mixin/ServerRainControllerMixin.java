@@ -1,5 +1,6 @@
 package me.qtq.downpour.mixin;
 
+import me.qtq.downpour.Downpour;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
@@ -20,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(ServerWorld.class)
 public abstract class ServerRainControllerMixin extends RainControllerMixin {
     @Shadow @Final private MinecraftServer server;
-    private static float rainStrength;
+    private float rainStrength;
 
     @Accessor
      abstract ServerWorldProperties getWorldProperties();
@@ -31,13 +32,16 @@ public abstract class ServerRainControllerMixin extends RainControllerMixin {
     }
 
     @Override
-    protected void scaleWithBiome(BlockPos pos, CallbackInfoReturnable<Boolean> info) {
-        Biome biome = ((World)(Object)this).getBiome(pos).value();
-        Float downfall = ((BiomeAccessor)(Object)biome).getWeather().downfall();
+    public float getRainStrength() {
         Integer rainTimer = this.getWorldProperties().getRainTime();
         this.rainStrength = (float) rainTimer / 24000.0f;
+        return this.rainStrength;
+    }
 
-        info.setReturnValue(1.0 - downfall < this.rainStrength);
+    @Override
+    protected void scaleWithBiome(BlockPos pos, CallbackInfoReturnable<Boolean> info) {
+        getRainStrength();
+        info.setReturnValue(Downpour.isRainingAtPos((World)(Object)this, pos));
     }
     @ModifyArgs(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/intprovider/UniformIntProvider;create(II)Lnet/minecraft/util/math/intprovider/UniformIntProvider;", ordinal = 0))
     private static void changeClearWeatherTimer(Args args) {
@@ -69,5 +73,6 @@ public abstract class ServerRainControllerMixin extends RainControllerMixin {
             this.server.getPlayerManager().sendToAll(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.RAIN_STARTED, rainStrength));
         }
     }
+
 
 }
