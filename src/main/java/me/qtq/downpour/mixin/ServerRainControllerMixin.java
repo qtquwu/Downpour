@@ -1,20 +1,25 @@
 package me.qtq.downpour.mixin;
 
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.intprovider.IntProvider;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.level.ServerWorldProperties;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(ServerWorld.class)
 public abstract class ServerRainControllerMixin extends RainControllerMixin {
+    @Shadow @Final private MinecraftServer server;
     private static float rainStrength;
 
     @Accessor
@@ -56,6 +61,13 @@ public abstract class ServerRainControllerMixin extends RainControllerMixin {
             args.set(1, rainStrength);
         }
     }
-
+    // When setWeather is called (i.e. when /weather is used), catch the rain strength and send it to the clients
+    @Inject(method = "setWeather", at = @At("HEAD"))
+    private void updateRainStrength(int clearDuration, int rainDuration, boolean raining, boolean thundering, CallbackInfo ci) {
+        rainStrength = (float) rainDuration / 24000.0f;
+        if (raining & rainDuration > 0) {
+            this.server.getPlayerManager().sendToAll(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.RAIN_STARTED, rainStrength));
+        }
+    }
 
 }

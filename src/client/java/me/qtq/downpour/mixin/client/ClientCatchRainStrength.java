@@ -16,8 +16,12 @@ public class ClientCatchRainStrength {
 		if (packet.getReason() == GameStateChangeS2CPacket.RAIN_STARTED) {
 			// if the packet value is equal to zero, the server is unmodded. Assume maximum strength.
 			ClientWorld world = ((ClientPlayNetworkHandler)(Object)this).getWorld();
+			if (world == null)
+				return;
 			if (packet.getValue() != 0.0f) {
-				((IRainStrength)world).setRainStrength(packet.getValue());
+				((IRainStrength) world).setRainStrength(packet.getValue());
+			} else {
+				((IRainStrength) world).setRainStrength(1.0f);
 			}
 		}
 	}

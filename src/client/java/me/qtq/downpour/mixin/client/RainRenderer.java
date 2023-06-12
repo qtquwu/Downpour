@@ -1,5 +1,7 @@
 package me.qtq.downpour.mixin.client;
 
+import me.qtq.downpour.Downpour;
+import me.qtq.downpour.DownpourClient;
 import me.qtq.downpour.IRainStrength;
 import me.qtq.downpour.mixin.BiomeAccessor;
 import net.minecraft.client.render.WorldRenderer;
@@ -18,6 +20,12 @@ public abstract class RainRenderer {
 
     @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "net/minecraft/world/biome/Biome.hasPrecipitation ()Z"))
     private boolean getRenderingDownfall(Biome instance) {
+        if (world == null)
+            return false;
+        if (DownpourClient.rainStrength < 0.0) {
+            ((IRainStrength)world).setRainStrength(world.isRaining() ? 1.0f : 0.0f);
+            DownpourClient .rainStrength = world.isRaining() ? 1.0f : 0.0f;
+        }
         if (1.0 - ((BiomeAccessor)(Object)instance).getWeather().downfall() < ((IRainStrength)world).getRainStrength()) {
             return true;
         }
