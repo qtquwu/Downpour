@@ -1,15 +1,24 @@
 # Downpour
-### Downpour is a mod that aims to add a little more realism to Minecraft's weather system without feeling out of place in vanilla.
+### Downpour is a fabric mod that aims to add a little more realism to Minecraft's weather system without feeling out of place in vanilla.
 
 Primarily, the mod makes it so that it rains more in wetter biomes such as jungles than in dryer biomes like plains, but it also changes the typical duration of rain/clear cycles to account for its newfound locality.
 
+There are no plans for a Forge version. Maybe a forge version already exists. I don't know, I don't care much for Forge. The MIT License allows any devs who want to port it to do so.
+
 ## Compatibility
-Compatible with iris and sodium
-Any combination of vanilla/modded server/client pairs work. However, a vanilla client with a modded server will not be able to see where it is raining and where it is not, but will feel its effects. A vanilla server with a modded client will act as though the client were not modded at all.
+Compatible with Iris and Sodium (the mod has to change when rain is rendered, so this could've been an issue).
+
+In theory at least, any mod that adds biomes should include appropriate downfall values. If they do, then there shouldn't be compatibility issues.
+
 Obviously, mods that modify how rain works may not be compatible depending on their implementation. Mix with caution.
 
-### How it works (a bit technical)
-In vanilla, when it starts raining in Minecraft, the server generates a random duration between 12,000-24,000 ticks, corresponding to 0.5 - 1.0 in-game days. When it clears, it generates a random duration from 12,000-180,000 ticks, corresponding to 0.5 - 7.5 days, during which period it will be clear.
+Any combination of vanilla/modded server/client pairs work. However, a vanilla client with a modded server will not be able to see where it is raining and where it is not, but will feel its effects. A vanilla server with a modded client will act as though the client were not modded at all.
+
+For developers: if you need to determine if it is raining at a location in a world that uses this mod, there is a method for this - Downpour.isRainingAtPos(World world, BlockPos pos). If you do not have access to the relevant world object, you can also determine this by biome (using isRainingInBiome(Biome biome)) or by the relevant values (using isRainingByValue(float downfall, float rainStrength)). 
+Mods that don't interface with this won't necessarily be strictly incompatible with this mod, but it will lead to odd behaviors as it may detect it is raining where it is not. The converse probably won't happen though.
+
+### How it works (quite a bit technical)
+In vanilla, when it starts raining, the server generates a random duration between 12,000-24,000 ticks, corresponding to 0.5 - 1.0 in-game days, during which it will rain. When it clears, it generates a random duration from 12,000-180,000 ticks, corresponding to 0.5 - 7.5 days, during which period it will be clear.
 
 The mod changes this system a bit. Instead of generating a random rain duration of 12,000-24,000 ticks, it generates a random duration of 100-24,000 ticks, enabling shorter "sprinkling" cycles. As well, the clear time is changed from 12,000-180,000 ticks to 3000-72,000 ticks.
 
