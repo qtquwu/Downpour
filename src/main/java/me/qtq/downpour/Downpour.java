@@ -4,14 +4,21 @@ import me.qtq.downpour.mixin.BiomeAccessor;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import org.apache.commons.math3.distribution.BetaDistribution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Downpour implements ModInitializer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("Downpour");
+	public static BetaDistribution rainTimerDistribution = new BetaDistribution(0.5, 2);
+
+	public static int getNewRainTime() {
+		return (int)(MathHelper.clamp(Downpour.rainTimerDistribution.sample() * 24000, 0.0, 24000.0));
+	}
 
 	// This is the actual formula for determining when it is raining based on downfall and rainStrength.
 	// Rarely do you need to access this directly, but it is nice if for no other reason to reduce the "knowing" responsibilities of other methods

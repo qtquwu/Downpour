@@ -6,7 +6,8 @@
 		"RainControllerMixin",
 		"BiomeAccessor",
 		"ServerRainControllerMixin",
-		"SnowStopper"
+		"SnowStopper",
+		"WeatherCommandMixin"
 	],
 
 	"injectors": {
