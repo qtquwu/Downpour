@@ -26,11 +26,6 @@ public abstract class ServerRainControllerMixin extends RainControllerMixin {
     @Accessor
      abstract ServerWorldProperties getWorldProperties();
 
-    @Accessor("CLEAR_WEATHER_DURATION_PROVIDER")
-    public static void setClearWeatherDurationProvider(IntProvider provider) {
-        throw new AssertionError();
-    }
-
     @Override
     public float getRainStrength() {
         Integer rainTimer = this.getWorldProperties().getRainTime();
@@ -43,6 +38,8 @@ public abstract class ServerRainControllerMixin extends RainControllerMixin {
         getRainStrength();
         info.setReturnValue(Downpour.isRainingAtPos((World)(Object)this, pos));
     }
+    // These functions are a little dangerous; they change the rain and clear timer but unfortunately if additional
+    // UniformIntProviders are added, there's risk of it causing incorrect behaviors.
     @ModifyArgs(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/intprovider/UniformIntProvider;create(II)Lnet/minecraft/util/math/intprovider/UniformIntProvider;", ordinal = 0))
     private static void changeClearWeatherTimer(Args args) {
         args.set(0, 3000);
@@ -54,6 +51,7 @@ public abstract class ServerRainControllerMixin extends RainControllerMixin {
         args.set(1, 24000);
     }
     // Send the rainStrength as a second argument in the rain_started packet so that the client knows where to make it rain this cycle
+    // If the client is vanilla, this value is simply discarded. So, it does not cause problems.
     @ModifyArgs(method = "tickWeather()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/packet/s2c/play/GameStateChangeS2CPacket;<init>(Lnet/minecraft/network/packet/s2c/play/GameStateChangeS2CPacket$Reason;F)V"))
     private void sendRainStrength(Args args) {
 
