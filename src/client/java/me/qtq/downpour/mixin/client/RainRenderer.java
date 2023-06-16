@@ -1,9 +1,8 @@
 package me.qtq.downpour.mixin.client;
 
 import me.qtq.downpour.Downpour;
-import me.qtq.downpour.DownpourClient;
-import me.qtq.downpour.IRainStrength;
-import me.qtq.downpour.mixin.BiomeAccessor;
+import me.qtq.downpour.ILocalRainClient;
+import me.qtq.downpour.IRainable;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
@@ -22,25 +21,31 @@ public abstract class RainRenderer {
     private boolean getRenderingDownfall(Biome biome) {
         if (world == null)
             return false;
+
         // We can initialize rain when client connects by setting value to negative to start
         // The problem is that if you disconnect + reconnect it'll default to the previous world's value
-        // Is that a real problem? We'll see.
-        if (DownpourClient.rainStrength < 0.0) {
-            ((IRainStrength)world).setRainStrength(world.isRaining() ? 1.0f : 0.0f);
-            DownpourClient.rainStrength = world.isRaining() ? 1.0f : 0.0f;
+        // TODO: Is that a real problem? We'll see.
+        if (((IRainable)world).getRainStrength() < 0.0) {
+            ((IRainable)world).setRainStrength(world.isRaining() ? 1.0f : 0.0f);
         }
-        return Downpour.isRainingInBiome(biome, ((IRainStrength) world).getRainStrength());
+        return Downpour.isRainingInBiome(biome, ((IRainable) world).getRainStrength());
     }
     // The target here is ONLY used for determining if the relevant precipitation is rain at pos
     // So if it is not raining, we don't need to differentiate between SNOW and NONE
     @Redirect(method = "tickRainSplashing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/Biome;getPrecipitation(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/world/biome/Biome$Precipitation;"))
-    private Biome.Precipitation getPrecipitationAtTime(Biome instance, BlockPos pos) {
-        if (world.getBiome(pos).value().getPrecipitation(pos) != Biome.Precipitation.RAIN) {
-            return Biome.Precipitation.NONE;
-        }
-        if (Downpour.isRainingAtPos(world, pos)) {
+    private Biome.Precipitation getPrecipitationAtPos(Biome biome, BlockPos pos) {
+        if (world.getBiome(pos).value().getPrecipitation(pos) == Biome.Precipitation.RAIN
+                && Downpour.isRainingAtPos(world, pos)) {
             return Biome.Precipitation.RAIN;
         }
         return Biome.Precipitation.NONE;
+    }
+    @Redirect(method = "tickRainSplashing", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getRainGradient(F)F"))
+    private float splashWithGlobalRainGradient(ClientWorld world, float v) {
+        return ((ILocalRainClient)world).getGlobalRainGradient();
+    }
+    @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getRainGradient(F)F"))
+    private float renderGlobalRain(ClientWorld world, float v) {
+        return ((ILocalRainClient)world).getGlobalRainGradient();
     }
 }

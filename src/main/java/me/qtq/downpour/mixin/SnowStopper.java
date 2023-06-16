@@ -1,7 +1,6 @@
 package me.qtq.downpour.mixin;
 
 import me.qtq.downpour.Downpour;
-import me.qtq.downpour.IRainStrength;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

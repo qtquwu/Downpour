@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import net.minecraft.util.math.MathHelper;
 
 @Mixin(ServerWorld.class)
-public abstract class ServerRainControllerMixin extends RainControllerMixin {
+public abstract class ServerWorldMixin extends RainControllerMixin {
     @Shadow @Final private MinecraftServer server;
     private float rainStrength;
 
@@ -33,7 +33,7 @@ public abstract class ServerRainControllerMixin extends RainControllerMixin {
     }
 
     @Override
-    protected void scaleWithBiome(BlockPos pos, CallbackInfoReturnable<Boolean> info) {
+    protected void posHasRain(BlockPos pos, CallbackInfoReturnable<Boolean> info) {
         getRainStrength();
         info.setReturnValue(Downpour.isRainingAtPos((World)(Object)this, pos));
     }
@@ -68,24 +68,18 @@ public abstract class ServerRainControllerMixin extends RainControllerMixin {
         }
     }
 
-    @Redirect(method = "tickWeather()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/ServerWorldProperties;setRainTime(I)V"))
-    private void changeRainTimer(ServerWorldProperties properties, int originalTimer) {
+    @Redirect(method = "tickWeather()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/ServerWorldProperties;setRaining(Z)V"))
+    private void changeRainTimer(ServerWorldProperties properties, boolean b) {
         // Make sure that the timer was changed by replicating the original filtering conditions
-        if (properties.getClearWeatherTime() > 0) {
-            //Downpour.LOGGER.info("Rain timer not intercepted because getClearWeatherTime is not zero");
-            return;
-        }
-        if (properties.getRainTime() > 0) {
-            //Downpour.LOGGER.info("Rain timer not intercepted because it is already nonzero");
-            return;
-        }
-        if (!properties.isRaining()) {
-            //Downpour.LOGGER.info("Rain timer not intercepted because it is already raining");
+        if (properties.getClearWeatherTime() > 0 || properties.getRainTime() > 0 || properties.isRaining()) {
+            properties.setRaining(b);
             return;
         }
         int rainTimer = Downpour.getNewRainTime();
+        //rainTimer = 1000; //DEBUG: I know I can generate proper values but want to see if the rain cycle is working without waiting 10 minutes lol
         Downpour.LOGGER.info("Rain Timer intercepted, set to " + rainTimer);
         properties.setRainTime(rainTimer);
+        properties.setRaining(true);
     }
 
     // When setWeather is called (i.e. when /weather is used), catch the rain strength and send it to the clients

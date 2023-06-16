@@ -39,7 +39,7 @@ public class Downpour implements ModInitializer {
 			return false;
 
 		Biome biome = world.getBiome(pos).value();
-		float rainStrength = ((IRainStrength)world).getRainStrength();
+		float rainStrength = ((IRainable)world).getRainStrength();
 
 		return isRainingInBiome(biome, rainStrength);
 	}

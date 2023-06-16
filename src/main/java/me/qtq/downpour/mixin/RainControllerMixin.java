@@ -1,17 +1,14 @@
 package me.qtq.downpour.mixin;
 
 import me.qtq.downpour.Downpour;
-import me.qtq.downpour.IRainStrength;
+import me.qtq.downpour.IRainable;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.MutableWorldProperties;
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.function.Supplier;
 
 @Mixin(World.class)
-public abstract class RainControllerMixin implements IRainStrength {
+public abstract class RainControllerMixin implements IRainable {
 	@Unique
 	private static float rainStrength;
 
@@ -40,7 +37,7 @@ public abstract class RainControllerMixin implements IRainStrength {
 
 	// Get the biome at the position, determine its downfall level, and determine if the rain gradient matches that level
 	@Inject(at = @At("TAIL"), method = "hasRain", cancellable = true)
-	protected void scaleWithBiome(BlockPos pos, CallbackInfoReturnable<Boolean> info) {
+	protected void posHasRain(BlockPos pos, CallbackInfoReturnable<Boolean> info) {
 		info.setReturnValue(Downpour.isRainingAtPos((World)(Object)this, pos));
 	}
 }
