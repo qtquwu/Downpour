@@ -17,18 +17,16 @@ public class ClientCatchRainStrength {
 
 	@Inject(at = @At("HEAD"), method = "onGameStateChange")
 	private void catchRainStrength(GameStateChangeS2CPacket packet, CallbackInfo info) {
+		if (world == null)
+			return;
 		if (packet.getReason() == GameStateChangeS2CPacket.RAIN_STARTED) {
 			// if the packet value is equal to zero, the server is unmodded. Assume maximum strength.
-			if (world == null)
-				return;
 			if (packet.getValue() != 0.0f) {
 				((IRainable) world).setRainStrength(packet.getValue());
 			} else {
 				((IRainable) world).setRainStrength(1.0f);
 			}
 		} else if (packet.getReason() == GameStateChangeS2CPacket.RAIN_STOPPED) {
-			if (world == null)
-				return;
 			((IRainable) world).setRainStrength(0.0f);
 		} else if (packet.getReason() == GameStateChangeS2CPacket.RAIN_GRADIENT_CHANGED) {
 			world.setRainGradient(packet.getValue());
