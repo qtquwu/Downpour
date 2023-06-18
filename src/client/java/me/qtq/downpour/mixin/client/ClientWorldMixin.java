@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,12 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.BooleanSupplier;
 
-import static java.lang.Math.min;
-
 @Mixin(ClientWorld.class)
 public class ClientWorldMixin implements ILocalRainClient {
-    @Shadow
-    private MinecraftClient client;
+    @Shadow @Final private MinecraftClient client;
 
     private float rainStrength;
     private float playerRainGradient = 0.0f;
@@ -27,11 +25,9 @@ public class ClientWorldMixin implements ILocalRainClient {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void updateRainGradient(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
-        if (client.player != null && isRainingAtPos(client.player.getBlockPos())) {
-            Downpour.LOGGER.info("Not raining at player position!");
-        }
         updateRainGradient(client.player.getBlockPos());
     }
+
     public float getGlobalRainGradient() {
         return globalRainGradient;
     }
@@ -45,7 +41,6 @@ public class ClientWorldMixin implements ILocalRainClient {
     public void updateRainGradient(BlockPos playerPos) {
         playerRainGradient += isRainingAtPos(playerPos) ? 0.01f : -0.01f;
         playerRainGradient = MathHelper.clamp(playerRainGradient, 0.0f, 1.0f);
-        Downpour.LOGGER.info("playerRainGradient: " + playerRainGradient);
     }
 
     @Override

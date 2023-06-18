@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Biome.class)
-public abstract class SnowStopper {
+public abstract class SnowStopperMixin {
     // Do not set snow if it is not actually snowing!
     @Inject(method = "canSetSnow", at = @At("HEAD"), cancellable = true)
     public void cannotSetSnow(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {

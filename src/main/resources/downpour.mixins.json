@@ -6,9 +6,10 @@
 		"RainControllerMixin",
 		"BiomeAccessor",
 		"ServerWorldMixin",
-		"SnowStopper",
+		"SnowStopperMixin",
 		"WeatherCommandMixin",
-		"BiomeCreatorMixin"
+		"BiomeCreatorMixin",
+		"sendRainInfoMixin"
 	],
 
 	"injectors": {

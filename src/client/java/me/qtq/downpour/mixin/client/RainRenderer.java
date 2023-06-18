@@ -21,15 +21,9 @@ public abstract class RainRenderer {
     private boolean getRenderingDownfall(Biome biome) {
         if (world == null)
             return false;
-
-        // We can initialize rain when client connects by setting value to negative to start
-        // The problem is that if you disconnect + reconnect it'll default to the previous world's value
-        // TODO: Is that a real problem? We'll see.
-        if (((IRainable)world).getRainStrength() < 0.0) {
-            ((IRainable)world).setRainStrength(world.isRaining() ? 1.0f : 0.0f);
-        }
         return Downpour.isRainingInBiome(biome, ((IRainable) world).getRainStrength());
     }
+
     // The target here is ONLY used for determining if the relevant precipitation is rain at pos
     // So if it is not raining, we don't need to differentiate between SNOW and NONE
     @Redirect(method = "tickRainSplashing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/Biome;getPrecipitation(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/world/biome/Biome$Precipitation;"))

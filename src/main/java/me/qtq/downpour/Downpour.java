@@ -15,9 +15,10 @@ public class Downpour implements ModInitializer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("Downpour");
 	public static BetaDistribution rainTimerDistribution = new BetaDistribution(0.5, 2);
+	public static final float MAX_RAIN_TIME = 24000f;
 
 	public static int getNewRainTime() {
-		return (int)(MathHelper.clamp(Downpour.rainTimerDistribution.sample() * 24000, 0.0, 24000.0));
+		return (int)(MathHelper.clamp(Downpour.rainTimerDistribution.sample() * MAX_RAIN_TIME, 0.0, MAX_RAIN_TIME));
 	}
 
 	// This is the actual formula for determining when it is raining based on downfall and rainStrength.
@@ -25,6 +26,7 @@ public class Downpour implements ModInitializer {
 	public static boolean isRainingByValue(float downfall, float rainStrength) {
 		return 1.0 - downfall < rainStrength;
 	}
+
 	// Given a biome and the current rainStrength, it determines if it should rain in this biome.
 	// Use this method if you do not have access to the exact position OR the current world.
 	public static boolean isRainingInBiome(Biome biome, float rainStrength) {
@@ -33,6 +35,7 @@ public class Downpour implements ModInitializer {
 		float downfall = ((BiomeAccessor)(Object)biome).getWeather().downfall();
 		return isRainingByValue(downfall, rainStrength);
 	}
+
 	// Given a position in a world, find if it is raining at this location.
 	public static boolean isRainingAtPos(World world, BlockPos pos) {
 		if (world == null)
