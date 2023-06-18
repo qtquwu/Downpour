@@ -2,7 +2,6 @@ package me.qtq.downpour;
 
 import me.qtq.downpour.mixin.BiomeAccessor;
 import net.fabricmc.api.ModInitializer;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;

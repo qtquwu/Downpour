@@ -1,6 +1,7 @@
 package me.qtq.downpour.mixin;
 
 import me.qtq.downpour.Downpour;
+import me.qtq.downpour.ServerState;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
@@ -28,8 +29,7 @@ import java.util.concurrent.Executor;
 @Mixin(ServerWorld.class)
 public abstract class ServerWorldMixin extends RainControllerMixin {
     private boolean lastRaining = false;
-    private float lastRainStrength = 0.0f;
-    private float rainStrength;
+    private ServerState serverState;
 
     @Shadow @Final private MinecraftServer server;
 
@@ -39,20 +39,19 @@ public abstract class ServerWorldMixin extends RainControllerMixin {
 
     @Override
     public float getRainStrength() {
-        if (this.rainStrength != lastRainStrength) {
-            Downpour.LOGGER.info("Rain Strength changed to " + this.rainStrength);
-        }
-        lastRainStrength = rainStrength;
-        return this.rainStrength;
+        return serverState.getRainStrength();
+    }
+    public void setRainStrength(float strength) {
+        serverState.setRainStrength(strength);
     }
 
     public void beginRain(float strength) {
         this.getWorldProperties().setRaining(true);
-        rainStrength = strength;
+        setRainStrength(strength);
     }
     public void stopRaining() {
         this.getWorldProperties().setRaining(false);
-        rainStrength = 0.0f;
+        setRainStrength(0.0f);
     }
     public void changeRainState(boolean isRaining) {
         lastRaining = this.getWorldProperties().isRaining();
@@ -80,9 +79,11 @@ public abstract class ServerWorldMixin extends RainControllerMixin {
 
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     private void initializeRainStrength(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci) {
+
+        serverState = ServerState.getServerState((ServerWorld)(Object)this);
         if (properties == null)
             return;
-        changeRainState(properties.isRaining());
+        setRainStrength(getRainStrength());
     }
 
     // Send the rainStrength as a second argument in the rain_started packet so that the client knows where to make it rain this cycle
@@ -93,9 +94,9 @@ public abstract class ServerWorldMixin extends RainControllerMixin {
         GameStateChangeS2CPacket.Reason reason = args.get(0);
         float f = args.get(1);
         if (reason == GameStateChangeS2CPacket.RAIN_STARTED) {
-            this.rainStrength = (float) getWorldProperties().getRainTime() / Downpour.MAX_RAIN_TIME;
-            System.out.println("Rain Strength Sent: " + rainStrength);
-            args.set(1, rainStrength);
+            setRainStrength((float) getWorldProperties().getRainTime() / Downpour.MAX_RAIN_TIME);
+            System.out.println("Rain Strength Sent: " + getRainStrength());
+            args.set(1, getRainStrength());
         }
     }
 
@@ -115,9 +116,9 @@ public abstract class ServerWorldMixin extends RainControllerMixin {
     // When setWeather is called (i.e. when /weather is used), catch the rain strength and send it to the clients
     @Inject(method = "setWeather", at = @At("HEAD"))
     private void updateRainStrength(int clearDuration, int rainDuration, boolean raining, boolean thundering, CallbackInfo ci) {
-        rainStrength = MathHelper.clamp((float) rainDuration / Downpour.MAX_RAIN_TIME, 0.0f, 1.0f);
+        setRainStrength(MathHelper.clamp((float) rainDuration / Downpour.MAX_RAIN_TIME, 0.0f, 1.0f));
         if (raining & rainDuration > 0) {
-            this.server.getPlayerManager().sendToAll(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.RAIN_STARTED, rainStrength));
+            this.server.getPlayerManager().sendToAll(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.RAIN_STARTED, getRainStrength()));
         }
     }
 
