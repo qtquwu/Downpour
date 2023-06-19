@@ -9,5 +9,5 @@ import net.minecraft.world.biome.Biome.Weather;
 @Mixin(Biome.class)
 public interface BiomeAccessor {
     @Accessor
-    public Weather getWeather();
+    Weather getWeather();
 }

@@ -56,7 +56,6 @@ public abstract class ServerWorldMixin extends RainControllerMixin {
     public void changeRainState(boolean isRaining) {
         lastRaining = this.getWorldProperties().isRaining();
         if (lastRaining != isRaining)
-            Downpour.LOGGER.info("Rain State changed on server to " + isRaining);
         if (isRaining)
             beginRain(this.getWorldProperties().getRainTime() / Downpour.MAX_RAIN_TIME);
         else
@@ -95,7 +94,6 @@ public abstract class ServerWorldMixin extends RainControllerMixin {
         float f = args.get(1);
         if (reason == GameStateChangeS2CPacket.RAIN_STARTED) {
             setRainStrength((float) getWorldProperties().getRainTime() / Downpour.MAX_RAIN_TIME);
-            System.out.println("Rain Strength Sent: " + getRainStrength());
             args.set(1, getRainStrength());
         }
     }
@@ -108,7 +106,7 @@ public abstract class ServerWorldMixin extends RainControllerMixin {
             return;
         }
         int rainTimer = Downpour.getNewRainTime();
-        Downpour.LOGGER.info("Rain Timer intercepted, set to " + rainTimer);
+        Downpour.LOGGER.info("Rain Timer set to " + rainTimer);
         properties.setRainTime(rainTimer);
         changeRainState(true);
     }

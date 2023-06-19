@@ -8,10 +8,8 @@
 		"ServerWorldMixin",
 		"SnowStopperMixin",
 		"WeatherCommandMixin",
-		"BiomeCreatorMixin",
 		"sendRainInfoMixin"
 	],
-
 	"injectors": {
 		"defaultRequire": 1
 	}

@@ -49,6 +49,6 @@ public class Downpour implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-
+		LOGGER.info("Downpour initialized (common)");
 	}
 }

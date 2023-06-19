@@ -3,15 +3,14 @@
 	"id": "downpour",
 	"version": "${version}",
 	"name": "Downpour",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Downpour changes the rain behavior in different biomes to make certain biomes rain more and less.",
 	"authors": [
-		"Me!"
+		"QtQ"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/qtquwu/Downpour"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/downpour/icon.png",
 	"environment": "*",
 	"entrypoints": {

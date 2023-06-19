@@ -17,7 +17,6 @@ public class sendRainInfoMixin {
     @Inject(method = "sendWorldInfo", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/packet/s2c/play/GameStateChangeS2CPacket;<init>(Lnet/minecraft/network/packet/s2c/play/GameStateChangeS2CPacket$Reason;F)V"), cancellable = true)
     private void sendRainInfo(ServerPlayerEntity player, ServerWorld world, CallbackInfo info) {
         if (world.isRaining()) {
-            Downpour.LOGGER.info("sent rain info to client!");
             player.networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.RAIN_STARTED, ((IRainable)world).getRainStrength()));
             player.networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.RAIN_GRADIENT_CHANGED, world.getRainGradient(1.0F)));
             player.networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.THUNDER_GRADIENT_CHANGED, world.getThunderGradient(1.0F)));

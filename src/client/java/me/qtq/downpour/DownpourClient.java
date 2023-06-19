@@ -7,6 +7,6 @@ public class DownpourClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-
+		Downpour.LOGGER.info("Downpour initialized (client-side)");
 	}
 }

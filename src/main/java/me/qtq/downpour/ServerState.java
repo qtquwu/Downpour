@@ -24,7 +24,7 @@ public class ServerState extends PersistentState {
         ServerState serverState = manager.getOrCreate(
                 ServerState::createFromNbt,
                 ServerState::new,
-                "Downpour"
+                "downpour"
         );
         return serverState;
     }

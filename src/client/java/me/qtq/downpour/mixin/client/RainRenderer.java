@@ -18,7 +18,7 @@ public abstract class RainRenderer {
     private ClientWorld world;
 
     @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "net/minecraft/world/biome/Biome.hasPrecipitation ()Z"))
-    private boolean getRenderingDownfall(Biome biome) {
+    public boolean getRenderingDownfall(Biome biome) {
         if (world == null)
             return false;
         return Downpour.isRainingInBiome(biome, ((IRainable) world).getRainStrength());

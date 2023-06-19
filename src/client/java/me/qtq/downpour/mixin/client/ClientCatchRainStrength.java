@@ -3,6 +3,7 @@ package me.qtq.downpour.mixin.client;
 import me.qtq.downpour.Downpour;
 import me.qtq.downpour.ILocalRainClient;
 import me.qtq.downpour.IRainable;
+import net.minecraft.client.gui.navigation.GuiNavigation;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
@@ -28,7 +29,10 @@ public class ClientCatchRainStrength {
 				world.setRainGradient(1.0f);
 			}
 			// if the packet value is equal to zero, the server is unmodded. Assume maximum strength.
-			((IRainable) world).setRainStrength(packet.getValue() != 0.0 ? packet.getValue() : 0.0f);
+			if (packet.getValue() == 0.0f) {
+				Downpour.LOGGER.info("Rain strength received as 0.0 - assuming vanilla server");
+			}
+			((IRainable) world).setRainStrength(packet.getValue() != 0.0f ? packet.getValue() : 1.0f);
 		} else if (packet.getReason() == GameStateChangeS2CPacket.RAIN_STOPPED) {
 			((IRainable) world).setRainStrength(0.0f);
 		} else if (packet.getReason() == GameStateChangeS2CPacket.RAIN_GRADIENT_CHANGED) {
