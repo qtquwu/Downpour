@@ -1,6 +1,5 @@
 package me.qtq.downpour.mixin;
 
-import me.qtq.downpour.Downpour;
 import me.qtq.downpour.IRainable;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.server.PlayerManager;

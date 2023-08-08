@@ -11,7 +11,8 @@ base {
 }
 
 repositories {
-
+	maven { url "https://maven.shedaniel.me/" }
+	maven { url "https://maven.terraformersmc.com/releases/" }
 }
 
 loom {
@@ -32,9 +33,16 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
 	implementation "org.apache.commons:commons-math3:3.6.1"
 	include "org.apache.commons:commons-math3:3.6.1"
-	// modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	implementation "com.google.code.gson:gson:2.10.1"
+
+	modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"){
+		exclude(group: "net.fabricmc.fabric-api")
+	}
 
 }
 
@@ -80,5 +88,6 @@ publishing {
 		// Notice: This block does NOT have the same function as the block in the top level.
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
+
 	}
 }

@@ -1,0 +1,17 @@
+{
+  "downpour.config.title": "Downpour Settings",
+
+  "downpour.config.category.general": "General Settings",
+  "downpour.config.category.distribution": "Rain Distribution Settings (Advanced)",
+
+  "downpour.config.disclaimer": "The distribution should return values clamped between 0.0 and 1.0; higher values correspond to stronger rain storms",
+  "downpour.config.min_rain_time": "Minimum Rain Time (ticks)",
+  "downpour.config.max_rain_time": "Maximum Rain Time (ticks)",
+  "downpour.config.distribution": "Rain Strength Distribution",
+  "downpour.config.argument1": "First Parameter",
+  "downpour.config.argument2": "Second Parameter",
+
+  "downpour.config.distribution.tooltip": "The type of distribution to use for rain strength",
+  "downpour.config.argument1.tooltip": "For Beta/Gamma distributions, this is alpha. For normal, this is the mean.",
+  "downpour.config.argument2.tooltip": "For Beta/Gamma distributions, this is beta. For normal, this is the standard deviation."
+}

@@ -1,9 +1,7 @@
 package me.qtq.downpour.mixin.client;
 
 import me.qtq.downpour.Downpour;
-import me.qtq.downpour.ILocalRainClient;
 import me.qtq.downpour.IRainable;
-import net.minecraft.client.gui.navigation.GuiNavigation;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;

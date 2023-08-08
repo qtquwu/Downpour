@@ -57,7 +57,7 @@ public abstract class ServerWorldMixin extends RainControllerMixin {
         lastRaining = this.getWorldProperties().isRaining();
         if (lastRaining != isRaining)
         if (isRaining)
-            beginRain(this.getWorldProperties().getRainTime() / Downpour.MAX_RAIN_TIME);
+            beginRain(this.getWorldProperties().getRainTime() / Downpour.getMaxRainTime());
         else
             stopRaining();
     }
@@ -93,7 +93,7 @@ public abstract class ServerWorldMixin extends RainControllerMixin {
         GameStateChangeS2CPacket.Reason reason = args.get(0);
         float f = args.get(1);
         if (reason == GameStateChangeS2CPacket.RAIN_STARTED) {
-            setRainStrength((float) getWorldProperties().getRainTime() / Downpour.MAX_RAIN_TIME);
+            setRainStrength((float) getWorldProperties().getRainTime() / Downpour.getMaxRainTime());
             args.set(1, getRainStrength());
         }
     }
@@ -114,7 +114,7 @@ public abstract class ServerWorldMixin extends RainControllerMixin {
     // When setWeather is called (i.e. when /weather is used), catch the rain strength and send it to the clients
     @Inject(method = "setWeather", at = @At("HEAD"))
     private void updateRainStrength(int clearDuration, int rainDuration, boolean raining, boolean thundering, CallbackInfo ci) {
-        setRainStrength(MathHelper.clamp((float) rainDuration / Downpour.MAX_RAIN_TIME, 0.0f, 1.0f));
+        setRainStrength(MathHelper.clamp((float) rainDuration / Downpour.getMaxRainTime(), 0.0f, 1.0f));
         if (raining & rainDuration > 0) {
             this.server.getPlayerManager().sendToAll(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.RAIN_STARTED, getRainStrength()));
         }

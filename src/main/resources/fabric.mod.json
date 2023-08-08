@@ -19,7 +19,8 @@
 		],
 		"client": [
 			"me.qtq.downpour.DownpourClient"
-		]
+		],
+		"modmenu": ["me.qtq.downpour.config.client.DownpourModMenu"]
 	},
 	"mixins": [
 		"downpour.mixins.json",
