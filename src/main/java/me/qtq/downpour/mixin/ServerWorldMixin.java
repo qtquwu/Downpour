@@ -1,6 +1,7 @@
 package me.qtq.downpour.mixin;
 
 import me.qtq.downpour.Downpour;
+import me.qtq.downpour.IBrightness;
 import me.qtq.downpour.ServerState;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.registry.RegistryKey;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 @Mixin(ServerWorld.class)
-public abstract class ServerWorldMixin extends RainControllerMixin {
+public abstract class ServerWorldMixin extends RainControllerMixin implements IBrightness {
     private boolean lastRaining = false;
     private ServerState serverState;
 
@@ -119,6 +120,5 @@ public abstract class ServerWorldMixin extends RainControllerMixin {
             this.server.getPlayerManager().sendToAll(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.RAIN_STARTED, getRainStrength()));
         }
     }
-
 
 }

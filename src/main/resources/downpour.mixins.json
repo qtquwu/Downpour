@@ -8,7 +8,10 @@
 		"ServerWorldMixin",
 		"SnowStopperMixin",
 		"WeatherCommandMixin",
-		"sendRainInfoMixin"
+		"sendRainInfoMixin",
+		"HostileEntityMixin",
+		"EntityMixin",
+		"MobEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

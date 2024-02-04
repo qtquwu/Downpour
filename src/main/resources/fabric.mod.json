@@ -34,8 +34,5 @@
 		"minecraft": "~1.20",
 		"java": ">=17"
 	},
-	"suggests": {
-		"another-mod": "*"
-	},
 	"accessWidener": "downpour.accesswidener"
 }

@@ -1,5 +1,6 @@
 package me.qtq.downpour;
 
+import net.minecraft.datafixer.DataFixTypes;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
@@ -19,13 +20,19 @@ public class ServerState extends PersistentState {
         return rainStrength;
     }
 
+    private static Type<ServerState> type = new Type<>(
+            ServerState::new,
+            ServerState::createFromNbt,
+            null
+            );
+
     public static ServerState getServerState(ServerWorld world) {
         PersistentStateManager manager = world.getPersistentStateManager();
         ServerState serverState = manager.getOrCreate(
-                ServerState::createFromNbt,
-                ServerState::new,
+                type,
                 "downpour"
         );
+        serverState.markDirty();
         return serverState;
     }
 
