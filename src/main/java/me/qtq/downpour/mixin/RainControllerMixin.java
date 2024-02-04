@@ -41,12 +41,8 @@ public abstract class RainControllerMixin implements IRainable, IBrightness {
 	public float getLocalBrightness(BlockPos pos) {
 		int ambientDarkness = calculateLocalAmbientDarkness(pos);
 
-		//float default_f = (float)((World)(Object)this).getLightLevel(pos, ((World)(Object)this).getAmbientDarkness()) / 15.0f;
 		float f = (float)((World)(Object)this).getLightLevel(pos, ambientDarkness) / 15.0F;
 		float g = f / (4.0F - 3.0F * f);
-
-		//Downpour.LOGGER.info("default brightness: " + ((World)(Object)this).getBrightness(pos));
-		//Downpour.LOGGER.info("new brightness: " + MathHelper.lerp(((World)(Object)this).getDimension().ambientLight(), g, 1.0F));
 
 		return MathHelper.lerp(((World)(Object)this).getDimension().ambientLight(), g, 1.0F);
 	}
@@ -54,11 +50,6 @@ public abstract class RainControllerMixin implements IRainable, IBrightness {
 	// Get the ambient darkness at a pos, taking into account rain
 	public int calculateLocalAmbientDarkness(BlockPos pos) {
 		boolean raining = Downpour.isRainingAtPos((World)(Object)this, pos);
-		// Calculating the default values is only useful for debugging
-		// otherwise this should be removed
-		/*double default_d = 1.0D - (double)(((World)(Object)this).getRainGradient(1.0F) * 5.0F) / 16.0D;
-		double default_e = 1.0D - (double)(((World)(Object)this).getThunderGradient(1.0F) * 5.0F) / 16.0D;
-		 */
 
 		double d = 1.0D - (raining ? 1.0 : 0.0)
 				* (double)(((World)(Object)this).getRainGradient(1.0F) * 5.0F) / 16.0D;
@@ -67,8 +58,6 @@ public abstract class RainControllerMixin implements IRainable, IBrightness {
 		double f = 0.5D + 2.0D * MathHelper.clamp((double)MathHelper.cos(((World)(Object)this).getSkyAngle(1.0F) * 6.2831855F), -0.25D, 0.25D);
 
 		int ambientDarkness = (int)((1.0D - f * d * e) * 11.0D);
-		//int defaultAmbientDarkness = (int)((1.0D - f * default_d * default_e) * 11.0D);
-
 
 		return ambientDarkness;
 	}

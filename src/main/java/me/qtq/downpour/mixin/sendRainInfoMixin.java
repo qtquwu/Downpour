@@ -1,5 +1,6 @@
 package me.qtq.downpour.mixin;
 
+import me.qtq.downpour.Downpour;
 import me.qtq.downpour.IRainable;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.server.PlayerManager;
@@ -20,6 +21,6 @@ public class sendRainInfoMixin {
             player.networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.RAIN_GRADIENT_CHANGED, world.getRainGradient(1.0F)));
             player.networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.THUNDER_GRADIENT_CHANGED, world.getThunderGradient(1.0F)));
         }
-        info.cancel();
+        //info.cancel();
     }
 }
