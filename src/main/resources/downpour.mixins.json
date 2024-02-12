@@ -11,7 +11,11 @@
 		"sendRainInfoMixin",
 		"HostileEntityMixin",
 		"EntityMixin",
-		"MobEntityMixin"
+		"MobEntityMixin",
+		"DrownedEntityMixin",
+		"DrownedEntityMixin$LeaveWaterGoalMixin",
+		"DrownedEntityMixin$TargetAboveWaterGoalMixin",
+		"DrownedEntityMixin$WanderAroundOnSurfaceGoalMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

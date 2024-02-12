@@ -13,6 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class WeatherCommandMixin {
     @Inject(method = "processDuration", at = @At("RETURN"), cancellable = true)
     private static void sendRandomDuration(ServerCommandSource source, int duration, IntProvider provider, CallbackInfoReturnable<Integer> cir) {
-        cir.setReturnValue(duration == -1 ? Downpour.getNewRainTime() : duration);
+        int newDuration = Downpour.getNewRainTime();
+        if (duration == -1)
+            Downpour.LOGGER.info("Setting rain time to " + newDuration);
+        cir.setReturnValue(duration == -1 ? newDuration : duration);
     }
 }

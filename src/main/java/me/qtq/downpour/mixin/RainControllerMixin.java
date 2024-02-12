@@ -3,6 +3,8 @@ package me.qtq.downpour.mixin;
 import me.qtq.downpour.Downpour;
 import me.qtq.downpour.IBrightness;
 import me.qtq.downpour.IRainable;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -62,6 +64,10 @@ public abstract class RainControllerMixin implements IRainable, IBrightness {
 		return ambientDarkness;
 	}
 
+	public boolean isLocallyDay(BlockPos pos) {
+		World instance = (World)(Object)this;
+		return !instance.getDimension().hasFixedTime() && this.calculateLocalAmbientDarkness(pos) < 4;
+	}
 
 	// Get the biome at the position, determine its downfall level, and determine if the rain gradient matches that level
 	@Inject(at = @At("TAIL"), method = "hasRain", cancellable = true)
