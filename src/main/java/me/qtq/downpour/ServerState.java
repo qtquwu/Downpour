@@ -1,6 +1,7 @@
 package me.qtq.downpour;
 
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
@@ -34,11 +35,11 @@ public class ServerState extends PersistentState {
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt) {
+    public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapper) {
         nbt.putFloat("rainStrength", rainStrength);
         return nbt;
     }
-    public static ServerState createFromNbt(NbtCompound nbt) {
+    public static ServerState createFromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapper) {
         ServerState serverState = new ServerState();
         serverState.rainStrength = nbt.getFloat("rainStrength");
         return serverState;

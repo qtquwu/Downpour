@@ -68,6 +68,10 @@ public abstract class ServerWorldMixin extends RainControllerMixin implements IB
         getRainStrength();
         info.setReturnValue(Downpour.isRainingAtPos((World)(Object)this, pos));
     }
+
+    public boolean isRainingAtPos(BlockPos pos) {
+        return Downpour.isRainingAtPos((World)(Object)this, pos);
+    }
     // This function is a little dangerous; it changes the clear timer but unfortunately if additional
     // UniformIntProviders are added, there's risk of it causing incorrect behaviors.
     @ModifyArgs(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/intprovider/UniformIntProvider;create(II)Lnet/minecraft/util/math/intprovider/UniformIntProvider;", ordinal = 0))
