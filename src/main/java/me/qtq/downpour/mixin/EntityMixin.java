@@ -1,6 +1,5 @@
 package me.qtq.downpour.mixin;
 
-import me.qtq.downpour.Downpour;
 import me.qtq.downpour.IBrightness;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;

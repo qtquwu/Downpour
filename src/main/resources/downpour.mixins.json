@@ -3,21 +3,22 @@
 	"package": "me.qtq.downpour.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"RainControllerMixin",
+		"BeeEntityMixin",
+		"BeeEntityMixin$PollinateGoalMixin",
 		"BiomeAccessor",
-		"ServerWorldMixin",
-		"SnowStopperMixin",
-		"WeatherCommandMixin",
-		"sendRainInfoMixin",
-		"HostileEntityMixin",
-		"EntityMixin",
-		"MobEntityMixin",
+		"BiomeCreatorMixin",
 		"DrownedEntityMixin",
 		"DrownedEntityMixin$LeaveWaterGoalMixin",
 		"DrownedEntityMixin$TargetAboveWaterGoalMixin",
 		"DrownedEntityMixin$WanderAroundOnSurfaceGoalMixin",
-		"BeeEntityMixin",
-		"BeeEntityMixin$PollinateGoalMixin"
+		"EntityMixin",
+		"HostileEntityMixin",
+		"MobEntityMixin",
+		"RainControllerMixin",
+		"sendRainInfoMixin",
+		"ServerWorldMixin",
+		"SnowStopperMixin",
+		"WeatherCommandMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -2,7 +2,10 @@ package me.qtq.downpour.config.client;
 
 import me.qtq.downpour.Downpour;
 import me.qtq.downpour.config.DownpourConfig;
-import me.shedaniel.clothconfig2.api.*;
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
+import me.shedaniel.clothconfig2.api.ConfigBuilder;
+import me.shedaniel.clothconfig2.api.ConfigCategory;
+import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
